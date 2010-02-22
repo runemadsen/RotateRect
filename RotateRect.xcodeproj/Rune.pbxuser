@@ -23,7 +23,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					993,
+					885,
 					20,
 					48,
 					43,
@@ -43,9 +43,57 @@
 			PBXPerProjectTemplateStateSaveDate = 288487670;
 			PBXWorkspaceStateSaveDate = 288487670;
 		};
+		perUserProjectItems = {
+			A52663DD113204CF008D20AD /* PBXTextBookmark */ = A52663DD113204CF008D20AD /* PBXTextBookmark */;
+			A52663DE113204CF008D20AD /* XCBuildMessageTextBookmark */ = A52663DE113204CF008D20AD /* XCBuildMessageTextBookmark */;
+			A52663E21132050E008D20AD /* PBXTextBookmark */ = A52663E21132050E008D20AD /* PBXTextBookmark */;
+		};
 		sourceControlManager = A5AB3C381131F8D80098A9A3 /* Source Control */;
 		userBuildSettings = {
 		};
+	};
+	A52663931131F963008D20AD /* MyCustomView.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1063, 552}}";
+			sepNavSelRange = "{133, 0}";
+			sepNavVisRange = "{0, 368}";
+		};
+	};
+	A52663941131F963008D20AD /* MyCustomView.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {775, 2574}}";
+			sepNavSelRange = "{2692, 0}";
+			sepNavVisRange = "{2731, 397}";
+		};
+	};
+	A52663DD113204CF008D20AD /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A52663931131F963008D20AD /* MyCustomView.h */;
+		name = "MyCustomView.h: 8";
+		rLen = 0;
+		rLoc = 133;
+		rType = 0;
+		vrLen = 368;
+		vrLoc = 0;
+	};
+	A52663DE113204CF008D20AD /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "'thenRot' undeclared (first use in this function)";
+		fRef = A52663941131F963008D20AD /* MyCustomView.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 116;
+		rType = 1;
+	};
+	A52663E21132050E008D20AD /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A52663941131F963008D20AD /* MyCustomView.m */;
+		name = "MyCustomView.m: 126";
+		rLen = 0;
+		rLoc = 3018;
+		rType = 0;
+		vrLen = 1140;
+		vrLoc = 2022;
 	};
 	A5AB3C291131F8D60098A9A3 /* RotateRect */ = {
 		isa = PBXExecutable;
@@ -63,6 +111,7 @@
 		dataTipSortType = 0;
 		debuggerPlugin = GDBDebugging;
 		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
 		enableDebugStr = 1;
 		environmentEntries = (
 		);

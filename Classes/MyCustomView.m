@@ -19,7 +19,12 @@ __________________________________________________________________ */
 {
 	squareSize = 100.0f;
 	twoFingers = NO;
+	location = CGPointZero;
 	rotation = 0.5f;
+	scale = 1.0f;
+	
+	lastDist = 0.0f;
+	
 	self.multipleTouchEnabled = YES;
 	[self configureAccelerometer];
 }
@@ -28,7 +33,7 @@ __________________________________________________________________ */
  __________________________________________________________________ */
 
 
--(void)configureAccelerometer
+- (void) configureAccelerometer
 {
 	UIAccelerometer*  theAccelerometer = [UIAccelerometer sharedAccelerometer];
 	
@@ -56,7 +61,7 @@ __________________________________________________________________ */
 	zField.text = [NSString stringWithFormat:@"%.5f", z];
 }
 
-/* Touch Events
+/* Touch Began
  __________________________________________________________________ */
 
 
@@ -64,20 +69,75 @@ __________________________________________________________________ */
 {
 	NSLog(@"touches began count %d, %@", [touches count], touches);
 	
-	if([touches count] &gt; 1)
+	if([touches count] > 1)
 	{
 		twoFingers = YES;
+		
+		UITouch *tOne = (UITouch*)[[touches allObjects] objectAtIndex:0];
+		UITouch *tTwo = (UITouch*)[[touches allObjects] objectAtIndex:1];
+		
+		CGPoint loc1 = [tOne locationInView:self];
+		CGPoint loc2 = [tTwo locationInView:self];
+		
+		lastDist = sqrt(((loc1.x-loc2.x)*(loc1.x-loc2.x)) + ((loc1.y-loc2.y)*(loc1.y-loc2.y)));
+		lastMid = CGPointMake((loc1.x+loc2.x)/2, (loc1.y+loc2.y)/2);
 	}
+	else 
+	{
+		twoFingers = NO;
+	}
+
 	
 	[self setNeedsDisplay];
 }
+
+
+/* Touch Moved
+__________________________________________________________________ */
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
 	NSLog(@"touches moved count %d, %@", [touches count], touches);
 	
+	if(twoFingers && [touches count] == 2)
+	{
+		UITouch *tOne = (UITouch*)[[touches allObjects] objectAtIndex:0];
+		UITouch *tTwo = (UITouch*)[[touches allObjects] objectAtIndex:1];
+		
+		// update
+		CGPoint loc1 = [tOne locationInView:self];
+		CGPoint loc2 = [tTwo locationInView:self];
+		
+		CGFloat dx = loc1.x - loc2.x;
+		CGFloat dy = loc1.y - loc2.y;
+		
+		CGPoint nowMid = CGPointMake((loc1.x+loc2.x) / 2, (loc1.y+loc2.y) / 2);
+		
+		CGFloat nowRot = atan2f(dy, dx);
+		CGFloat deltaRot = nowRot - lastRot;
+		
+		CGFloat nowDist = sqrt(((loc1.x-loc2.x) * (loc1.x-loc2.x)) + ((loc1.y-loc2.y)*(loc1.y-loc2.y)));
+		CGFloat deltaScale = nowDist / lastDist;
+		
+		if(!newTouch)
+		{
+			rotation += deltaRot;
+			scale = deltaScale;
+			location = CGPointMake(location.x + (nowMid.x - lastMid.x), location.y + (nowMid.y - lastMid.y));
+		}
+		
+		lastMid = nowMid;
+		lastRot = nowRot;
+		
+		if(newTouch) newTouch = NO;
+	}
+	
 	[self setNeedsDisplay];
 }
+
+
+/* Touch Ended
+ __________________________________________________________________ */
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -100,20 +160,15 @@ __________________________________________________________________ */
 	CGFloat half = squareSize/2;
 	CGRect theRect = CGRectMake(-half, -half, squareSize, squareSize);
 	
-	// Grab the drawing context
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	
-	// like Processing pushMatrix
-	CGContextSaveGState(context);
-	CGContextTranslateCTM(context, centerx, centery);
+	CGContextSaveGState(context); // pushmatrix
+	CGContextTranslateCTM(context, centerx, centery); // translate
 	
-	// Uncomment to see the rotated square
-	//CGContextRotateCTM(context, rotation);
+	CGContextTranslateCTM(context, location.x, location.y);
 	
-	// Set red stroke
 	CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0);
 	
-	// Set different based on multitouch
 	if(!twoFingers)
 	{
 		CGContextSetRGBFillColor(context, 0.0, 1.0, 0.0, 1.0);
@@ -123,12 +178,10 @@ __________________________________________________________________ */
 		CGContextSetRGBFillColor(context, 0.0, 1.0, 1.0, 1.0);
 	}
 	
-	// Draw a rect with a red stroke
 	CGContextFillRect(context, theRect);
 	CGContextStrokeRect(context, theRect);
 	
-	// like Processing popMatrix
-	CGContextRestoreGState(context);
+	CGContextRestoreGState(context); // popmatrix
 }
 
 /* Dealloc

@@ -1,15 +1,25 @@
 #import <UIKit/UIKit.h>
 
-@interface MyCustomView : UIView
+@interface MyCustomView : UIView <UIAccelerometerDelegate>
 {
-	CGFloat                    squareSize;
-	CGFloat                    rotation;
-	CGColorRef                 aColor;
-	BOOL                       twoFingers;
+	CGFloat squareSize;
 	
-	IBOutlet UILabel           *xField;
-	IBOutlet UILabel           *yField;
-	IBOutlet UILabel           *zField;
+	CGFloat scale;
+	CGPoint location;
+	CGFloat rotation;
+	
+	CGFloat lastDist;
+	CGPoint lastMid;
+	CGFloat lastRot;
+	
+	CGColorRef aColor;
+	
+	BOOL twoFingers;
+	BOOL newTouch;
+	
+	IBOutlet UILabel *xField;
+	IBOutlet UILabel *yField;
+	IBOutlet UILabel *zField;
 }
 
 @end
